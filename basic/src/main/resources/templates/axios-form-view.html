@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Post Service</title>
+</head>
+<body>
+    <div style="margin-left: 10%; margin-right: 10%;">
+        <h3>🙂 회원 가입 </h3>
+        <!-- 💡js를 통해 동작되도록 변경 -->
+        <form id="postForm">
+            <div>
+                <label for="name">이름</label>
+                <input type="text" id="name" name="name" size="10" maxlength="20">
+            </div>
+            <div>
+                <label for="email">이메일</label>
+                <input type="email" id="email" name="email" size="10" maxlength="20">
+            </div>
+            <div>
+                <label for="password">비밀번호</label>
+                <input type="password" id="password" name="password" size="10" maxlength="20">
+            </div>
+            <button type="submit">SUBMIT</button>
+        </form>
+    </div>
+
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script>
+        document.getElementById("postForm").addEventListener('submit',
+            async function(event) { // await로 post 보낼거라 async 사용
+                event.preventDefault();
+
+                const name = document.getElementById("name").value;
+                const email = document.getElementById("email").value;
+                const password = document.getElementById("password").value;
+
+                // title=hong&contents=hong is.. 이런 &로 이루어진 form 형식으로 들어옴 => js_form 활용한 방법
+                const formData = new FormData();
+                formData.append("name", name);
+                formData.append("email", email);
+                formData.append("password", password);
+
+                // form 데이터 전송
+                try{
+                    const response = await axios.post("http://localhost:8080/hello/axios-form-view", formData);
+                    console.log(response.data);
+                } catch(e) {
+                    console.log(e.message);
+                }
+
+            }
+        ); // submit 타입, 콜백함수
+    </script>
+</body>
+</html>
