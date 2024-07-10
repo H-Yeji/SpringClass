@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>spring json</title>
+</head>
+<body>
+
+<div style="margin-left: 10%; margin-right: 10%;">
+    <h3>🙂 회원 가입 </h3>
+    <!-- 💡js를 통해 동작되도록 변경 -->
+    <form id="postForm">
+        <div>
+            <label for="name">이름</label>
+            <input type="text" id="name" name="name" size="10" maxlength="20">
+        </div>
+        <div>
+            <label for="email">이메일</label>
+            <input type="email" id="email" name="email" size="10" maxlength="20">
+        </div>
+        <div>
+            <label for="password">비밀번호</label>
+            <input type="password" id="password" name="password" size="10" maxlength="20">
+        </div>
+        <div>
+            <label for="file">이미지 파일</label>
+            <input type="file" name="file" id="file">
+        </div>
+        <button type="submit">SUBMIT</button>
+    </form>
+</div>
+
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script>
+    document.getElementById("postForm").addEventListener('submit',
+        async function(event) {
+            event.preventDefault();
+
+            const name = document.getElementById("name").value;
+            const email = document.getElementById("email").value;
+            const password = document.getElementById("password").value;
+
+            // 객체 생성
+            const hello = {name:name, email:email, password:password};
+            // json 객체로 ㄱㄱ
+            const helloJson = JSON.stringify(hello);
+
+            const fileInput = document.getElementById("file");
+            const file = fileInput.files[0] // file은 배열 형태로 get됨
+
+            const formData = new FormData();
+            // json형태로 name, email, password 담아버리고 file도 따로 담아버림
+            // (1) 이렇게 작성하면 controller에서 @RequestPart 사용
+            formData.append("hello", new Blob([helloJson], {type:"application/json"})); //Blob함수는 데이터형을 지정/변환할 때 사용
+            formData.append("file", file);
+
+            // (2) 이렇게 작성하면 controller에서 @RequestParam으로 사용 가능
+            //formData.append("hello", helloJson);
+            //formData.append("file", file);
+
+            // form 데이터 전송
+            try{
+                const response = await axios.post("http://localhost:8080/hello/axios-json-file-view",
+                                formData, {headers : {'Content-Type': 'multipart/form-data'}});
+                console.log(response.data);
+            } catch(e) {
+                console.log(e.message);
+            }
+        }
+    );
+</script>
+</body>
+</html>

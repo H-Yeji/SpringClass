@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>spring json</title>
+
+</head>
+<body>
+
+    <div style="margin-left: 10%; margin-right: 10%;">
+        <h3>🙂 성적 확인 </h3>
+        <!-- 💡js를 통해 동작되도록 변경 -->
+        <form id="postForm">
+            <div>
+                <label for="name">이름</label>
+                <input type="text" id="name" name="name" size="10" maxlength="20">
+            </div>
+            <div>
+                <label for="email">이메일</label>
+                <input type="email" id="email" name="email" size="10" maxlength="20">
+            </div>
+            <div>성적 정보</div>
+            <div id="grades">
+                <div class = 'grade'>
+                    수업명 <input type="text" name="className" class="className"><br>
+                    점수 <input type="text" name="point" class="point"><br>
+                </div>
+            </div>
+            <button type="button" onclick="addScores()">성적 추가</button>
+            <br>
+            <input type="submit" value="제출">
+        </form>
+    </div>
+
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script>
+        // 성적 추가 버튼
+        function addScores() {
+
+            const myTarget = document.getElementById("grades");
+
+            myTarget.innerHTML += `
+                <div class="grade">
+                    수업명 <input type="text" name="className" class="className"><br>
+                    점수 <input type="text" name="point" class="point"><br>
+                </div>`;
+
+        }
+
+        document.getElementById("postForm").addEventListener('submit',
+            async function(event) {
+                event.preventDefault();
+                const name = document.getElementById('name').value;
+                const email = document.getElementById('email').value;
+                let grades = [];
+                const gradeDivs = document.getElementsByClassName('grade');
+                for(let i = 0 ; i < gradeDivs.length ; i++){
+                    const className = gradeDivs[i].getElementsByClassName('className')[0].value;
+                    const point = gradeDivs[i].getElementsByClassName('point')[0].value;
+                    const gradeObj = {className,point};
+                    grades.push(gradeObj);
+                }
+                console.log(grades);
+                // form 데이터 전송
+                try{
+                    const response = await axios.post("http://localhost:8080/hello/axios-nested-json-view", {name:name, email:email, grade:grades});
+                    console.log(response.data);
+                } catch(e) {
+                    console.log(e.message);
+                }
+            }
+        );
+    </script>
+</body>
+</html>

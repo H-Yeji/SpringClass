@@ -1,12 +1,15 @@
 package com.beyond.basic.controller;
 
 import com.beyond.basic.domain.Hello;
+import com.beyond.basic.domain.Student;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @Controller //얘는 컨트롤러얌 - 사용자의 요청을 처리하고 응답하는 편의기능임을 명시
 //@RestController // Controller + 각 메서드마다 @ResponseBody
@@ -53,7 +56,7 @@ public class HelloController {
     @GetMapping("/param1")
     @ResponseBody // json 이니까 필요
     public Hello param1(@RequestParam(value = "name") String name,
-                             @RequestParam(value = "email") String email) {
+                        @RequestParam(value = "email") String email) {
 
         Hello hello = new Hello();
         hello.setName(name);
@@ -164,7 +167,7 @@ public class HelloController {
     // name, email, password 전송 (js 사용)
     @GetMapping("/axios-form-view")
     public String axiosFormView() {
-        return "axios-form-view";
+        return "axiosFormView";
     }
 
     @PostMapping("/axios-form-view")
@@ -195,13 +198,86 @@ public class HelloController {
     /**
      * (5) js를 활용한 json 데이터 전송
      */
+    @GetMapping("/axios-json-view")
+    public String axiosJsonView() {
+        return "axiosJsonView";
+    }
+
+    // 이전처럼 @ModelAttribute Hello hello 하는방식은 json에서 제대로 데이터 바인딩이 안됨 (null출력)
+    // 왜냐면 ? 위 방법은 "파라미터"로 값을 받아오는 방식에서 사용하는 것이기 때문임
+    // 그럼 json으로 전송한 데이터는 ? => "@RequestBody"를 활용해야 함 ⭐
+    @PostMapping("/axios-json-view")
+    @ResponseBody
+    public String axiosJsonPost(@RequestBody Hello hello) {
+        System.out.println(hello);
+        return "ok";
+    }
+
 
     /**
      * (6) js를 활용한 json 데이터 전송 (+파일) => json + file
      */
+    @GetMapping("/axios-json-file-view")
+    public String axiosJsonFileView() {
+        return "axiosJsonFileView";
+    }
+
+    // @RequestPart : 파일과 json을 처리할 때 주로 사용
+    @PostMapping("/axios-json-file-view")
+    @ResponseBody
+    // @RequestParam(value = "hello") String hello,
+    // @RequestParam(value = "file") MultipartFile file) throws JsonProcessingException
+    public String axiosJsonFilePost(@RequestPart("hello") Hello hello,
+                                    @RequestPart("file") MultipartFile file){
+        System.out.println("hello: " + hello);
+        //System.out.println("file: " + file.getOriginalFilename());
+
+        // String으로 받은 뒤, 수동으로 객체로 변환 (RequestParam 사용하는 방법 쓸 때)
+//        ObjectMapper objectMapper = new ObjectMapper();
+//        Hello h1 = objectMapper.readValue(hello, Hello.class);
+//        System.out.println(h1.getName());
+        System.out.println(file.getOriginalFilename());
+        return "ok";
+    }
 
     /**
      * (7) js를 활용한 json 데이터 전송인데 파일 여러개
      */
+    @GetMapping("/axios-json-multifile-view")
+    public String axiosJsonMultifileView() {
+        return "axiosJsonMultifileView";
+    }
+
+    @PostMapping("/axios-json-multifile-view")
+    @ResponseBody
+    public String axiosJsonMultifilePost(@RequestPart("hello") Hello hello,
+                                         @RequestPart("files") List<MultipartFile> files) {
+
+        System.out.println(hello);
+        for(MultipartFile file: files) {
+            System.out.println(file.getOriginalFilename());
+        }
+        return "ok";
+    }
+
+
+    /**
+     *  (8) 중첩된 json 데이터 처리
+     *  {name: 'yeji', email: 'yeji@test.com', scores: [{math:60}, {music:70}, {english:50}]}
+     */
+    @GetMapping("/axios-nested-json-view")
+    public String axiosNestedJsonView() {
+        return "axiosNestedJsonView";
+    }
+
+
+    @PostMapping("/axios-nested-json-view")
+    @ResponseBody
+    public String axiosNestedJsonPost(@RequestBody Student student) {
+
+        System.out.println(student);
+        return "ok";
+    }
+
 
 }

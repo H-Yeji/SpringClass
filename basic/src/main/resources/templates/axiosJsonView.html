@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>spring json</title>
+</head>
+<body>
+
+    <div style="margin-left: 10%; margin-right: 10%;">
+        <h3>🙂 회원 가입 </h3>
+        <!-- 💡js를 통해 동작되도록 변경 -->
+        <form id="postForm">
+            <div>
+                <label for="name">이름</label>
+                <input type="text" id="name" name="name" size="10" maxlength="20">
+            </div>
+            <div>
+                <label for="email">이메일</label>
+                <input type="email" id="email" name="email" size="10" maxlength="20">
+            </div>
+            <div>
+                <label for="password">비밀번호</label>
+                <input type="password" id="password" name="password" size="10" maxlength="20">
+            </div>
+            <button type="submit">SUBMIT</button>
+        </form>
+    </div>
+
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script>
+        document.getElementById("postForm").addEventListener('submit',
+            async function(event) {
+                event.preventDefault();
+
+                const name = document.getElementById("name").value;
+                const email = document.getElementById("email").value;
+                const password = document.getElementById("password").value;
+
+                // json 만들기
+                const postJson = {name, email, password}; // 단축속성 활용
+                // {title:title, contents:contents} 랑 같음 (key: value)
+
+                try{
+                    // 배포할 때 public 주소로 복붙
+                    const response = await axios.post("http://localhost:8080/hello/axios-json-view", postJson);
+                    console.log(response.data);
+                } catch(e) {
+                    console.log(e.message);
+                }
+            }
+        );
+    </script>
+</body>
+</html>

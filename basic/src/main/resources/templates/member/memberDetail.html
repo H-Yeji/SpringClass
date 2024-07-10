@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Member Detail</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            margin: 0;
+            padding-top: 50px; /* 상단 여백 추가 */
+        }
+        .container {
+            text-align: center;
+        }
+        .page-header {
+            margin-bottom: 20px;
+        }
+        .table {
+            margin: 0 auto;
+            width: 50%;
+        }
+        .float-start {
+            text-align: left; /* 버튼을 왼쪽 정렬 */
+            margin-bottom: 20px;
+        }
+        .btn {
+            display: inline-block; /* 버튼을 인라인 블록으로 설정 */
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="page-header"><h3>🙂 Member Detail</h3></div>
+
+        <table class="table">
+            <tbody id="tby">
+                <tr>
+                    <td>id</td>
+                    <td><span th:text="${id}"></span></td>
+                </tr>
+                <tr>
+                    <td>name</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>email</td>
+                    <td></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+</body>
+</html>
