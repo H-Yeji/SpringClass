@@ -26,7 +26,10 @@ repositories {
 // starter 종속성 -> 일반적으로 별도의 버전관리 필요x, 버전에 따라 호환성 맞춰줌
 dependencies {
 	// DB 연결 및 관리를 위한 의존성 : jdbc, mybatis, jpa, spring-data-jpa
-//	implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
+	implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
+	// mariadb 클라이언트 추가
+	runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
+
 //	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 
 	// implementation : 컴팡리 시점과 런타임 시점에 모두 필요하나 라이브러리임을 명시

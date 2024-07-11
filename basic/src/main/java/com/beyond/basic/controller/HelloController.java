@@ -72,7 +72,7 @@ public class HelloController {
      *
      * 요청 ) ?name=xxx&email=xxx&password=xxx
      * 데이터 바인딩 조건
-     * (1) 기본 생성자 반드시 있어야 함 (2) settr가 있어야함
+     * (1) 기본 생성자 반드시 있어야 함 (2) setter가 있어야함
      * -> 그래서 어노테이션 쓸 거면 entity에 NoArgs 어쩌고 꼭 있어야함
      */
     @GetMapping("/param3")

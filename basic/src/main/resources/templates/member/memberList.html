@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -19,32 +19,53 @@
         }
         .page-header {
             margin-bottom: 20px;
-            margin-right : 10%;
         }
         .table {
             margin: 0 auto;
             width: 80%;
         }
-        .btn {
-            display: inline-block; /* 버튼을 인라인 블록으로 설정 */
+        .float-end {
+            text-align: right; / 버튼을 오른쪽 정렬 /
+            margin-bottom: 20px;
+            margin-right: 10%;
         }
-        .btn-container {
+        .btn {
+            display: inline-block;
+        }
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background-color: #f8f9fa;
+            padding: 10px 0;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .navbar a {
+            margin-right: 15px;
+            text-decoration: none;
+            color: black;
+        }
+        .navbar .container {
             display: flex;
             justify-content: flex-end;
-            margin-bottom: 20px;
         }
     </style>
 </head>
 <body>
-
+    <div class="navbar">
+        <div class="container">
+            <div th:replace="member/header :: headerFragment"></div>
+        </div>
+    </div>
+    <br>
     <div class="container">
         <div class="page-header"><h3>🙂 Author List</h3></div>
-        <div class="btn-container">
+        <div class="float-end">
             <a href="./create">
                 <button class="btn btn-success">회원가입</button>
             </a>
         </div>
-
+        <br>
         <table class="table">
             <thead>
             <tr>
@@ -53,7 +74,12 @@
                 <th>Email</th>
             </tr>
             </thead>
-            <tbody id="tby">
+            <tbody>
+            <tr th:each="member : ${memberResDtoList}">
+                <td th:text="${member.id}">1</td>
+                <td th:text="${member.name}">이름</td>
+                <td th:text="${member.email}">이메일</td>
+            </tr>
             </tbody>
         </table>
     </div>
