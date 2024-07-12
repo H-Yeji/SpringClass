@@ -27,10 +27,12 @@ repositories {
 dependencies {
 	// DB 연결 및 관리를 위한 의존성 : jdbc, mybatis, jpa, spring-data-jpa
 	implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
+	// mybatis 관련 의존성 추가
+	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.2.0'
 	// mariadb 클라이언트 추가
 	runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
 
-//	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 
 	// implementation : 컴팡리 시점과 런타임 시점에 모두 필요하나 라이브러리임을 명시
 	// 타임리프 (템플릿 엔진 - jsp, 타임리프 등) 의존성

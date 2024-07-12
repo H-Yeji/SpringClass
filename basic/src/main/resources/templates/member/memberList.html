@@ -76,7 +76,9 @@
             </thead>
             <tbody>
             <tr th:each="member : ${memberResDtoList}">
-                <td th:text="${member.id}">1</td>
+                <td>
+                    <a th:text="${member.id}" th:href="@{/member/detail/{id}(id=${member.id})}">1</a>
+                </td>
                 <td th:text="${member.name}">이름</td>
                 <td th:text="${member.email}">이메일</td>
             </tr>

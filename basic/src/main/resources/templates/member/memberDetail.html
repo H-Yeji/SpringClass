@@ -61,18 +61,22 @@
         <div class="page-header"><h3>🙂 Member Detail</h3></div>
 
         <table class="table">
-            <tbody id="tby">
+            <tbody>
                 <tr>
                     <td>id</td>
-                    <td><span th:text="${id}"></span></td>
+                    <td><span th:text="${memberDto.id}"></span></td>
                 </tr>
                 <tr>
                     <td>name</td>
-                    <td></td>
+                    <td><span th:text="${memberDto.name}"></span></td>
                 </tr>
                 <tr>
                     <td>email</td>
-                    <td></td>
+                    <td><span th:text="${memberDto.email}"></span></td>
+                </tr>
+                <tr>
+                    <td>password</td>
+                    <td><span th:text="${memberDto.password}"></span></td>
                 </tr>
             </tbody>
         </table>

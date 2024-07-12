@@ -2,7 +2,9 @@ package com.beyond.basic.repository;
 
 import com.beyond.basic.domain.Member;
 
+import javax.swing.text.html.Option;
 import java.util.List;
+import java.util.Optional;
 
 public interface MemberRepository {
 
@@ -14,7 +16,7 @@ public interface MemberRepository {
     /**
      * id로 조회
      */
-    Member findById(Long id);
+    Optional<Member> findById(Long id);
 
     /**
      * 회원 전체 조회
