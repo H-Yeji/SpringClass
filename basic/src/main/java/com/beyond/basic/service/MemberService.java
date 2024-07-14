@@ -23,7 +23,7 @@ import java.util.Optional;
 public class MemberService {
 
     // memberRepository 재할당 불가 -> final
-    private final MemberRepository memberRepository;
+//    private final MemberRepository memberRepository;
 
     // memberService가 호출됨고ㅏ 동시에 memberRepository 생성이 아니라,
     // memberService 생성자가 호출될 때 memberRepository를 만들기 위해 생성자 생성
@@ -43,8 +43,18 @@ public class MemberService {
 //    public MemberService(MemberJpaRepository memberMemoryRepository) {
 //        this.memberRepository = memberMemoryRepository;
 //    }
-    @Autowired // spring data jpa 활용
-    public MemberService(MemberSpringDataJpaRepository memberMemoryRepository) {
+
+    // 다형성 설계
+//    private final MemberRepository memberRepository;
+//    @Autowired // spring data jpa 활용
+//    public MemberService(MemberSpringDataJpaRepository memberMemoryRepository) {
+//        this.memberRepository = memberMemoryRepository;
+//    }
+
+    // 비다형성 설계
+    private final MyMemberRepository memberRepository;
+    @Autowired // 싱글톤 객체를 주입(di) 받는다는 것을 의미
+    public MemberService(MyMemberRepository memberMemoryRepository) {
         this.memberRepository = memberMemoryRepository;
     }
 
