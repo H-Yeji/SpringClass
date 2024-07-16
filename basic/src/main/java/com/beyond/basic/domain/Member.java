@@ -68,6 +68,7 @@ public class Member {
     public MemberDetailResDto detFromEntity() {
 
         LocalDateTime createdTime = this.getCreatedTime();
+
         String date = createdTime.getYear()+"년 " + createdTime.getMonthValue() + "월 " +
                 createdTime.getDayOfMonth() + "일";
 

@@ -103,7 +103,6 @@ public class MemberService {
         // (1) 적절한 트랜잭션 롤백처리 하려고 => 전제조건) 트랜잭션 어노테이션이 붙어있어야 함
         // (2) 클라이언트한테 적절한 메시지 + 적절한 상태 코드 줄 수 있음
         Member member = findMember.orElseThrow(()->new EntityNotFoundException("없는 회원 입니다."));
-
         // 아래 코드 -> Member에 detFromEntity 생성하면서 주석처리함
 //        dto.setId(member.getId());
 //        dto.setName(member.getName());

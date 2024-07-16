@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,10 +45,8 @@ public class MemberRestController {
         List<MemberResDto> memberResDtoList = memberService.memberList();
 
         List<CommonResDto> commonResDto = new ArrayList<>();
-
         for (MemberResDto memberResDto: memberResDtoList) {
             commonResDto.add(new CommonResDto(HttpStatus.OK, "no error", memberResDto));
-
         }
         return new ResponseEntity<>(commonResDto, HttpStatus.OK);
     }
@@ -55,27 +54,61 @@ public class MemberRestController {
     /**
      * 회원 상세 조회
      */
+//    @GetMapping("/member/detail/{id}")
+//    public MemberDetailResDto memberDetail(@PathVariable Long id) {
+//
+//        MemberDetailResDto memberDto = memberService.memberDetail(id);
+//        System.out.println(memberDto);
+//
+//        return memberDto;
+//    }
+
+    // member/detail : 성공하면 CommonResDto 200, 예외터지면 CommonErrorDto로 return 404
     @GetMapping("/member/detail/{id}")
-    public MemberDetailResDto memberDetail(@PathVariable Long id) {
+    public ResponseEntity<?> memberDetail(@PathVariable Long id) {
 
-        MemberDetailResDto memberDto = memberService.memberDetail(id);
+        try {
+            MemberDetailResDto memberDto = memberService.memberDetail(id);
 
-        return memberDto;
+            CommonResDto commonResDto = new CommonResDto(HttpStatus.OK, "no error", memberDto);
+
+            return new ResponseEntity<>(commonResDto, HttpStatus.OK);
+
+        } catch (EntityNotFoundException e){
+            CommonErrorDto commonErrorDto = new CommonErrorDto(HttpStatus.NOT_FOUND.value(), e.getMessage());
+
+            return new ResponseEntity<>(commonErrorDto, HttpStatus.NOT_FOUND);
+        }
     }
 
     /**
      * 회원 가입
      * @RequestBody = json 으로 받아볼게 ?
      */
+//    @PostMapping("/member/create")
+//    public String createMemberPost(@RequestBody MemberReqDto dto) {
+//
+//        try {
+//            memberService.memberCreate(dto);
+//            return "ok"; // 잘 등록됐다고 ok 출력
+//        } catch (IllegalArgumentException e) {
+//            e.printStackTrace();
+//            return "error 발생 ‼️";
+//        }
+//    }
+
+    // member/create : 성공하면 200, 실패하면 400
     @PostMapping("/member/create")
-    public String createMemberPost(@RequestBody MemberReqDto dto) {
+    public ResponseEntity<?> createMemberPost(@RequestBody MemberReqDto dto) {
 
         try {
             memberService.memberCreate(dto);
-            return "ok"; // 잘 등록됐다고 ok 출력
+
+            CommonResDto commonResDto = new CommonResDto(HttpStatus.OK, "member created successfully", null);
+            return new ResponseEntity<>(commonResDto, HttpStatus.OK);
         } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-            return "error 발생 ‼️";
+            CommonErrorDto commonErrorDto = new CommonErrorDto(HttpStatus.BAD_REQUEST.value(), e.getMessage());
+            return new ResponseEntity<>(commonErrorDto, HttpStatus.BAD_REQUEST);
         }
     }
 
