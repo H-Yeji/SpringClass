@@ -2,6 +2,7 @@ package com.beyond.basic.service;
 
 import com.beyond.basic.domain.*;
 import com.beyond.basic.repository.*;
+import org.hibernate.boot.model.naming.IllegalIdentifierException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,9 +16,9 @@ import java.util.Optional;
 // input값의 검증 및 실질적인 비지니스 로직은 서비스 계층에서 수행
 @Service // 난 서비스얌 + 싱글톤 객체로 생성해줄게
 //@RequiredArgsConstructor // 생성자(public MemberService) 자동 생성
-@Transactional
+@Transactional(readOnly = true)
 // Transactional 어노테이션을 통해 모든 메서드에 트랜잭션을 적용하고,
-// 만약 예외가 발생시 롤백처리 자동화
+// 만약 예외가 발생시 롤백처리 자동화⭐
 public class MemberService {
 
     // memberRepository 재할당 불가 -> final
@@ -83,6 +84,10 @@ public class MemberService {
         // dto > toEntity 메서드 활용
         Member member = dto.toEntity(); // 객체 메서드 호출 (매우 간단쓰.. )
         memberRepository.save(member);
+        // transactional 롤백처리 테스트
+//        if (member.getName().equals("kim")) {
+//            throw new IllegalArgumentException("잘못된 입력입니다.");
+//        } // 여기서 예외가 터지면 위에서 한 save가 취소됨
     }
 
     /**

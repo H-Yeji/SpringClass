@@ -8,7 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @Controller //얘는 컨트롤러얌 - 사용자의 요청을 처리하고 응답하는 편의기능임을 명시
@@ -27,6 +27,15 @@ public class HelloController {
     public String helloWorld() {
         return "helloworld";
     }
+
+    /**
+     * 아래와 같이 controller에서도 HttpServletRequest를 주입받아 사용 가능
+     */
+//    public String helloWorld(HttpServletRequest request) {
+//        System.out.println(request.getSession());
+//        System.out.println(request.getHeader("Cookie"));
+//        return "helloworld";
+//    }
 
     /**
      * (3) 사용자가 json 데이터 요청 (get)

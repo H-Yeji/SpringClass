@@ -1,14 +1,14 @@
 package com.beyond.basic.controller;
 
-import com.beyond.basic.domain.MemberDetailResDto;
-import com.beyond.basic.domain.MemberReqDto;
-import com.beyond.basic.domain.MemberResDto;
-import com.beyond.basic.domain.MemberUpdateDto;
+import com.beyond.basic.domain.*;
 import com.beyond.basic.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -29,12 +29,27 @@ public class MemberRestController {
     /**
      * 회원 목록 조회
      */
+//    @GetMapping("/member/list")
+//    public List<MemberResDto> findMemberList() {
+//
+//        List<MemberResDto> memberResDtoList = memberService.memberList();
+//
+//        return memberResDtoList;
+//    }
+
+    // memberList : CommonResDto 감싸서 상태코드까지 return 200
     @GetMapping("/member/list")
-    public List<MemberResDto> findMemberList() {
+    public ResponseEntity<List<CommonResDto>> findMemberList() {
 
         List<MemberResDto> memberResDtoList = memberService.memberList();
 
-        return memberResDtoList;
+        List<CommonResDto> commonResDto = new ArrayList<>();
+
+        for (MemberResDto memberResDto: memberResDtoList) {
+            commonResDto.add(new CommonResDto(HttpStatus.OK, "no error", memberResDto));
+
+        }
+        return new ResponseEntity<>(commonResDto, HttpStatus.OK);
     }
 
     /**
