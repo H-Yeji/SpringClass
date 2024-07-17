@@ -16,7 +16,7 @@ import java.util.List;
 //@AllArgsConstructor // 모든 생성자
 @NoArgsConstructor // 기본 생성자는 jpa에서 필수
 @Getter
-public class Member {
+public class Member extends BaseEntity {
 
     // IDENTITY : auto_increment 설정
     // auto : jpa 자동으로 적절한 전략을 선택하도록 맡기는 것
@@ -38,12 +38,13 @@ public class Member {
 
     // 시간 추가 (LocalDateTime > db 에선 DateTime으로 들어감)
     // 캐멀케이스 사용시 db에는 언더바로 생성됨 (created_time)
-    @CreationTimestamp // db에는 current_timestamp가 생성되지 않음
-    // 이 어노테이션 사용 > 직접 db에 insert할 땐 시간이 안찍힘 = 즉, 프로그램을 꼭 타고 데이터가 들어가야 함
-    private LocalDateTime createdTime;
-
-    @UpdateTimestamp
-    private LocalDateTime updateTime;
+//    @CreationTimestamp // db에는 current_timestamp가 생성되지 않음
+//    // 이 어노테이션 사용 > 직접 db에 insert할 땐 시간이 안찍힘 = 즉, 프로그램을 꼭 타고 데이터가 들어가야 함
+//    private LocalDateTime createdTime;
+//
+//    @UpdateTimestamp
+//    private LocalDateTime updateTime;
+    // --> BaseEntity에 넣음
 
     public Member(String name, String email, String password) {
         this.name = name;

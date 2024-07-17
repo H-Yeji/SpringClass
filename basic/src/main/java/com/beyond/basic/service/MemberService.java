@@ -83,6 +83,11 @@ public class MemberService {
 
         // dto > toEntity 메서드 활용
         Member member = dto.toEntity(); // 객체 메서드 호출 (매우 간단쓰.. )
+
+        if (memberRepository.findByEmail(dto.getEmail()).isPresent()) {
+            throw new IllegalArgumentException("이미 존재하는 email입니다.");
+        }
+
         memberRepository.save(member);
         // transactional 롤백처리 테스트
 //        if (member.getName().equals("kim")) {
@@ -114,10 +119,10 @@ public class MemberService {
 //                createdTime.getDayOfMonth() + "일";
 //        memberDetailResDto.setDateTime(date);
 
-        System.out.println("글쓴이의 쓴글 개수" + member.getPosts().size());
-        for (Post p : member.getPosts()) {
-            System.out.println("글의 제목 " + p.getTitle());
-        }
+//        System.out.println("글쓴이의 쓴글 개수" + member.getPosts().size());
+//        for (Post p : member.getPosts()) {
+//            System.out.println("글의 제목 " + p.getTitle());
+//        }
         MemberDetailResDto memberDetailResDto = member.detFromEntity();
         return memberDetailResDto;
     }

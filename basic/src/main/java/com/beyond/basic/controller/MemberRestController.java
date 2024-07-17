@@ -2,6 +2,7 @@ package com.beyond.basic.controller;
 
 import com.beyond.basic.domain.*;
 import com.beyond.basic.service.MemberService;
+import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +18,7 @@ import java.util.List;
  */
 @RestController //@ResponseBody + @Controller
 @RequestMapping("/rest")
+@Api(tags = "회원관리 서비스")
 public class MemberRestController {
 
     private final MemberService memberService;
@@ -131,6 +133,11 @@ public class MemberRestController {
     public String deleteMember(@PathVariable Long id) {
         memberService.delete(id);
 
+        return "ok";
+    }
+
+    @GetMapping("/member/text")
+    public String memberText() {
         return "ok";
     }
 
