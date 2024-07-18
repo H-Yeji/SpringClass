@@ -288,5 +288,10 @@ public class HelloController {
         return "ok";
     }
 
+    // builder 패턴 실습
+    public void helloBuilderTest() {
+        Hello hello = Hello.builder().build();
+    }
+
 
 }

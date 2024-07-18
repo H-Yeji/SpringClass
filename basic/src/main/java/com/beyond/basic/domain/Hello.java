@@ -18,4 +18,39 @@ public class Hello {
 //    public String toString() { // -> Data 어노테이션으로 대체 가넝
 //        return "[name]: " + name + " [email]: " + email + " [password]: " + password;
 //    }
+
+    // builder패턴 직접 구현
+    // 빌더 패텬 적용 대상 생성자가 필요
+    public Hello(HelloBuilder helloBuilder) {
+        this.name = helloBuilder.name;
+        this.email = helloBuilder.email;
+        this.password = helloBuilder.password;
+    }
+
+    public static HelloBuilder builder() {
+        return new HelloBuilder();
+    }
+
+    public static class HelloBuilder {
+
+        private String name;
+        private String email;
+        private String password;
+
+        public HelloBuilder name (String name) {
+            this.name = name;
+            return this; // 메모리 주소만 return
+        }
+        public HelloBuilder email (String email) {
+            this.email = email;
+            return this;
+        }
+        public HelloBuilder password (String password) {
+            this.password = password;
+            return this;
+        }
+        public Hello build() {
+            return new Hello(this);
+        }
+    }
 }
