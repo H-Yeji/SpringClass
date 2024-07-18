@@ -28,10 +28,15 @@ public class AuthorService {
      * 회원가입
      */
     @Transactional
-    public void authorCreate(AuthorCreatedDto dto) {
+    public Author authorCreate(AuthorCreatedDto dto) {
 
+        if (authorRepository.findByEmail(dto.getEmail()).isPresent()) {
+            throw new IllegalArgumentException("이미 존재하는 이메일입니다.");
+        }
         Author author = dto.toEntity(); // dto > entity
-        authorRepository.save(author);
+        Author savedAuthor = authorRepository.save(author);
+
+        return savedAuthor;
     }
 
     /**
@@ -61,6 +66,14 @@ public class AuthorService {
         AuthorDetailDto authorDetailDto = author.detailFromEntity();
 
         return authorDetailDto;
+    }
+
+    // email로 author 객체 찾아오기
+    public Author authorFindByEmail(String email) {
+        Author author = authorRepository.findByEmail(email).orElseThrow(() ->
+                new EntityNotFoundException("없는 이메일입니다."));
+
+        return author;
     }
 
 }

@@ -15,7 +15,13 @@ public class AuthorCreatedDto {
     private Role role;
 
     public Author toEntity() {
-        Author author = new Author(this.name, this.email, this.password, this.role);
+        //Author author = new Author(this.name, this.email, this.password, this.role);
+        Author author = Author.builder()
+                .name(this.name)
+                .email(this.email)
+                .password(this.password)
+                .role(this.role)
+                .build();
         return author;
     }
 }

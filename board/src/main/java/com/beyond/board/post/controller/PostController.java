@@ -4,6 +4,7 @@ import com.beyond.board.post.dto.PostCreateDto;
 import com.beyond.board.post.dto.PostDetailDto;
 import com.beyond.board.post.dto.PostResDto;
 import com.beyond.board.post.service.PostService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,6 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/post")
+@Slf4j
 public class PostController {
 
     private final PostService postService;
@@ -25,7 +27,9 @@ public class PostController {
     @PostMapping("/create")
     public String registPost(@RequestBody PostCreateDto dto) {
 
+        log.info("regis들어간다");
         postService.registPost(dto);
+        log.info("regist에서 나왔다");
 
         return "ok";
     }

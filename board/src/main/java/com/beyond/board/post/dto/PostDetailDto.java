@@ -1,16 +1,20 @@
 package com.beyond.board.post.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import net.bytebuddy.asm.Advice;
 
-@Getter
-@NoArgsConstructor
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 @AllArgsConstructor
+@NoArgsConstructor
+@Builder
+@Data
 public class PostDetailDto {
 
     private Long id;
     private String title;
     private String contents;
     private String createdTime;
+    //private String updatedTime;
 }

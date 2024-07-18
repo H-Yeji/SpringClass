@@ -4,13 +4,17 @@ import com.beyond.board.author.dto.AuthorCreatedDto;
 import com.beyond.board.author.dto.AuthorDetailDto;
 import com.beyond.board.author.dto.AuthorResDto;
 import com.beyond.board.author.service.AuthorService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController
+@Controller
 @RequestMapping("/author")
+@Slf4j
 public class AuthorController {
 
     private final AuthorService authorService;
@@ -22,30 +26,40 @@ public class AuthorController {
     /**
      * 생성
      */
+    @GetMapping("/create")
+    public String createAuthor() {
+        log.info("화면 열어보기");
+        return "author/author_register";
+    }
+
     @PostMapping("/create")
-    public String createAuthor(@RequestBody AuthorCreatedDto dto) {
+    public String createAuthor(AuthorCreatedDto dto) {
+        log.info("등록해보까");
         authorService.authorCreate(dto);
-        return "ok";
+        System.out.println("등록완");
+        return "redirect:/author/list";
     }
 
     /**
      * 목록 조회
      */
     @GetMapping("/list")
-    public List<AuthorResDto> authorList() {
+    public String authorList(Model model) {
         List<AuthorResDto> authorResDtoList = authorService.authorList();
-        return authorResDtoList;
+        model.addAttribute("authorList", authorResDtoList);
+        return "author/author_list";
     }
 
     /**
      * 회원 상세 조회
      */
     @GetMapping("/detail/{id}")
-    public AuthorDetailDto authorDetail(@PathVariable Long id) {
+    public String authorDetail(@PathVariable Long id, Model model) {
 
         AuthorDetailDto authorDetailDto = authorService.authorDetail(id);
+        model.addAttribute("author", authorDetailDto);
 
-        return authorDetailDto;
+        return "author/author_details";
     }
 
 

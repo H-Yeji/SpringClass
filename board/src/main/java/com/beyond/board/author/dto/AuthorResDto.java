@@ -1,13 +1,12 @@
 package com.beyond.board.author.dto;
 
 import com.beyond.board.author.domain.Role;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-@Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
+@Data
 public class AuthorResDto {
 
     private Long id;
