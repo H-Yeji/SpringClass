@@ -1,16 +1,20 @@
 package com.beyond.board.post.controller;
 
+import com.beyond.board.author.dto.AuthorUpdateDto;
 import com.beyond.board.post.dto.PostCreateDto;
 import com.beyond.board.post.dto.PostDetailDto;
 import com.beyond.board.post.dto.PostResDto;
+import com.beyond.board.post.dto.PostUpdateDto;
 import com.beyond.board.post.service.PostService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController
+@Controller
 @RequestMapping("/post")
 @Slf4j
 public class PostController {
@@ -24,35 +28,62 @@ public class PostController {
     /**
      * 게시글 등록
      */
+    @GetMapping("/create")
+    public String registPost() {
+        return "/post/post_register";
+    }
+
+
     @PostMapping("/create")
-    public String registPost(@RequestBody PostCreateDto dto) {
+    public String registPost(@ModelAttribute PostCreateDto dto) {
 
-        log.info("regis들어간다");
         postService.registPost(dto);
-        log.info("regist에서 나왔다");
 
-        return "ok";
+        return "redirect:/post/list";
     }
 
     /**
      * 게시물 목록 조회
      */
     @GetMapping("/list")
-    public List<PostResDto> postList() {
+    public String postList(Model model) {
 
         List<PostResDto> postResDto = postService.postList();
+        model.addAttribute("postList", postResDto);
 
-        return postResDto;
+        return "post/post_list";
     }
 
     /**
      * 게시물 상세 조회
      */
     @GetMapping("/detail/{id}")
-    public PostDetailDto detailPost(@PathVariable Long id) {
+    public String detailPost(@PathVariable Long id, Model model) {
 
         PostDetailDto postDetailDto = postService.postDetail(id);
+        model.addAttribute("post", postDetailDto);
 
-        return postDetailDto;
+        return "post/post_details";
+    }
+
+    /**
+     * 게시글 삭제
+     */
+    @GetMapping("/delete/{id}")
+    public String authorDelete(@PathVariable Long id) {
+
+        postService.delete(id);
+        return "redirect:/post/list";
+    }
+
+    /**
+     * 게시글 수정
+     */
+    @PostMapping("/update/{id}")
+    public String postUpdate(@PathVariable Long id, @ModelAttribute PostUpdateDto postUpdateDto) {
+
+        postService.postUpdate(id, postUpdateDto);
+
+        return "redirect:/post/detail/"+id;
     }
 }

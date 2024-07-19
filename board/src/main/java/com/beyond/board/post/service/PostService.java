@@ -1,18 +1,21 @@
 package com.beyond.board.post.service;
 
 import com.beyond.board.author.domain.Author;
+import com.beyond.board.author.dto.AuthorUpdateDto;
 import com.beyond.board.author.repository.AuthorRepository;
 import com.beyond.board.author.service.AuthorService;
 import com.beyond.board.post.domain.Post;
 import com.beyond.board.post.dto.PostCreateDto;
 import com.beyond.board.post.dto.PostDetailDto;
 import com.beyond.board.post.dto.PostResDto;
+import com.beyond.board.post.dto.PostUpdateDto;
 import com.beyond.board.post.repository.PostRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -57,7 +60,9 @@ public class PostService {
 
         // (2) authorService 주입받아서 -> email로 찾기
         String findEmail = dto.getAuthorEmail();
+        log.info("이메일 잘 찾았음? {}", findEmail);
         Author author = authorService.authorFindByEmail(findEmail);
+        log.info("이메일로 찾아온 객체 : {}", author.getEmail());
         Post post = dto.toEntity(author); // dto > entity
         return postRepository.save(post);
     }
@@ -67,17 +72,20 @@ public class PostService {
      */
     public List<PostResDto> postList() {
 
-        List<Post> postList = postRepository.findAll();
+        //List<Post> postList = postRepository.findAll();
+        List<Post> postList = postRepository.findAllFetch(); // lazy 때문에 변경
 
         List<PostResDto> postResDtoList = new ArrayList<>();
 
         for (Post post : postList) {
 
+            // lazy 때문에 변경
             // 작성자 이메일도 가져와서 보내기
-            String findEmail = post.getAuthor().getEmail();
-            Author author = authorService.authorFindByEmail(findEmail);
+//            String findEmail = post.getAuthor().getEmail();
+//            Author author = authorService.authorFindByEmail(findEmail);
 
-            PostResDto postResDto = post.listFromEntity(author);
+//            PostResDto postResDto = post.listFromEntity(author);
+            PostResDto postResDto = post.listFromEntity();
             postResDtoList.add(postResDto);
         }
 
@@ -97,5 +105,30 @@ public class PostService {
 
         return postDetailDto;
     }
+
+    /**
+     * 게시글 삭제
+     */
+    @Transactional
+    public void delete(Long id) {
+        postRepository.deleteById(id);
+    }
+
+    /**
+     * 게시글 수정
+     */
+    @Transactional
+    public void postUpdate(Long id, PostUpdateDto dto) {
+
+        Optional<Post> findPost = postRepository.findById(id);
+
+        Post post = findPost.orElseThrow(() -> new EntityNotFoundException("없는 게시글 입니다."));
+
+        post.updateFromEntity(dto);
+
+        postRepository.save(post);
+
+    }
+
 
 }

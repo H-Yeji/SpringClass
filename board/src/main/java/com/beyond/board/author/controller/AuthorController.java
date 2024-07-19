@@ -3,12 +3,14 @@ package com.beyond.board.author.controller;
 import com.beyond.board.author.dto.AuthorCreatedDto;
 import com.beyond.board.author.dto.AuthorDetailDto;
 import com.beyond.board.author.dto.AuthorResDto;
+import com.beyond.board.author.dto.AuthorUpdateDto;
 import com.beyond.board.author.service.AuthorService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -60,6 +62,27 @@ public class AuthorController {
         model.addAttribute("author", authorDetailDto);
 
         return "author/author_details";
+    }
+
+    /**
+     * 회원 삭제
+     */
+    @GetMapping("/delete/{id}")
+    public String authorDelete(@PathVariable Long id) {
+
+        authorService.delete(id);
+        return "redirect:/author/list";
+    }
+
+    /**
+     * 회원 수정
+     */
+    @PostMapping("/update/{id}")
+    public String authorUpdate(@PathVariable Long id, @ModelAttribute AuthorUpdateDto authorUpdateDto) {
+
+        authorService.authorUpdate(id, authorUpdateDto);
+
+        return "redirect:/author/detail/"+id;
     }
 
 

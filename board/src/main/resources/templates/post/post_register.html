@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,13 +7,17 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
 </head>
 <body>
-    <object data="header.html" type="text/html" style="width:100%"></object>
+    <div th:replace="common/header :: headerFragment"></div>
     <div style="margin-left: 10%; margin-right: 10%;">
         <h3 style="text-align: center;">⏰ 글 작성하기</h3>
-        <form action="http://localhost:8081/post/register2" method="post" enctype="application/x-www-form-urlencoded">
-            <div class="form-group"> <!-- 부트스트랩 사용 -->
+        <form action="/post/create" method="post" enctype="application/x-www-form-urlencoded">
+            <div class="form-group">
                 <label for="title">제목</label>
                 <input type="text" id="title" class="form-control" name="title" placeholder="제목을 작성하세요.">
+            </div>
+            <div class="form-group">
+                <label for="authorEmail">이메일</label>
+                <input type="text" id="authorEmail" class="form-control" name="authorEmail" placeholder="이메일을 입력하세요.">
             </div>
             <div class="form-group">
                 <label for="contents">내용 입력</label><br>
@@ -21,7 +25,7 @@
             </div>
             <br>
             <div class="float-end">
-                <button type="submit">SUBMIT</button>
+                <button type="submit" class="btn btn-success">SUBMIT</button>
             </div>
         </form>
     </div>

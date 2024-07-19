@@ -17,6 +17,5 @@ public interface AuthorRepository extends JpaRepository<Author, Long> {
     // findByAgeIstNull, findByIsNotNull
     // finAllOrderByEmail : 정렬조건 추가
     Optional<Author> findByEmail(String email);
-    //List<Author> findByNameIsNull();
 
 }

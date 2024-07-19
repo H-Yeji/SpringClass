@@ -5,6 +5,8 @@ import com.beyond.board.author.domain.Role;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+
 @Data
 @NoArgsConstructor
 public class AuthorCreatedDto {
@@ -21,6 +23,7 @@ public class AuthorCreatedDto {
                 .email(this.email)
                 .password(this.password)
                 .role(this.role)
+                .posts(new ArrayList<>())
                 .build();
         return author;
     }

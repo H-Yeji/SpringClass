@@ -2,6 +2,7 @@ package com.beyond.board.author.domain;
 
 import com.beyond.board.author.dto.AuthorDetailDto;
 import com.beyond.board.author.dto.AuthorResDto;
+import com.beyond.board.author.dto.AuthorUpdateDto;
 import com.beyond.board.common.BaseTimeEntity;
 import com.beyond.board.post.domain.Post;
 import lombok.AllArgsConstructor;
@@ -11,6 +12,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -37,8 +39,12 @@ public class Author extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private Role role;
 
+
     // post와 관계설정
-    @OneToMany(mappedBy = "author")
+    // 일반적으로 부모 엔티티에 cascade 옵션 설정
+    // 부모 엔티티 : 자식 객체에게 영향을 끼칠 수 있는 엔티티
+    // cascadeType.ALL => 모든 작업을 다 연관시켜서 실행
+    @OneToMany(mappedBy = "author", cascade = CascadeType.ALL)
     private List<Post> posts;
 
 
@@ -82,6 +88,14 @@ public class Author extends BaseTimeEntity {
                 .build();
 
         return authorDetailDto;
+    }
+
+    public Author updateFromEntity(AuthorUpdateDto dto) {
+
+        this.name = dto.getName();
+        this.password = dto.getPassword();
+
+        return this;
     }
 
 }
