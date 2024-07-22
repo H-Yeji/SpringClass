@@ -2,7 +2,6 @@ package com.beyond.board.post.service;
 
 import com.beyond.board.post.domain.Post;
 import com.beyond.board.post.repository.PostRepository;
-import lombok.RequiredArgsConstructor;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
