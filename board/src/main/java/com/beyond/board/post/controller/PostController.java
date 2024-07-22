@@ -1,6 +1,7 @@
 package com.beyond.board.post.controller;
 
 import com.beyond.board.author.dto.AuthorUpdateDto;
+import com.beyond.board.post.domain.Post;
 import com.beyond.board.post.dto.PostCreateDto;
 import com.beyond.board.post.dto.PostDetailDto;
 import com.beyond.board.post.dto.PostResDto;
@@ -8,7 +9,12 @@ import com.beyond.board.post.dto.PostUpdateDto;
 import com.beyond.board.post.service.PostService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Repository;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
@@ -43,12 +49,14 @@ public class PostController {
     }
 
     /**
-     * 게시물 목록 조회
+     * 게시물 목록 조회 -> page 처리로 변경
      */
     @GetMapping("/list")
-    public String postList(Model model) {
+    public String postList(Model model, @PageableDefault(size=10, sort = "createdTime"
+            , direction = Sort.Direction.DESC) Pageable pageable) {
 
-        List<PostResDto> postResDto = postService.postList();
+
+        Page<PostResDto> postResDto = postService.postList(pageable);
         model.addAttribute("postList", postResDto);
 
         return "post/post_list";
@@ -86,4 +94,18 @@ public class PostController {
 
         return "redirect:/post/detail/"+id;
     }
+
+    /**
+     * post 목록 페이징 처리 테스트
+     */
+    @GetMapping("/list/page")
+    @ResponseBody
+    // Pageable 요청 방법 : localhost:8080/post/list?size=10&page=0 (쿼리 파라미터 방식)
+    public Page<PostResDto> postListPage(@PageableDefault(size=10, sort = "createdTime"
+            , direction = Sort.Direction.DESC) Pageable pageable) { // Page를 리턴할 때 타입에 List<> 빼도됨
+
+        return postService.postListPage(pageable);
+    }
+
+
 }

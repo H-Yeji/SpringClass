@@ -8,6 +8,7 @@
 </head>
 <body>
     <div th:replace="common/header :: headerFragment"></div>
+    <br>
     <div style="margin-left: 10%; margin-right: 10%;">
         <h3 style="text-align: center;">⏰ 글 작성하기</h3>
         <form action="/post/create" method="post" enctype="application/x-www-form-urlencoded">
@@ -24,10 +25,18 @@
                 <textarea name="contents" id="contents" class="form-control" rows="10" maxlen="800" placeholder="내용을 작성하세요."></textarea>
             </div>
             <br>
+            <div>
+                <label>예약 여부</label>
+                <input type="radio" name="appointment" value="Y">YES
+                <input type="radio" name="appointment" value="N" checked>NO
+                &nbsp;
+                <label>예약 시간</label>
+                <input type="datetime-local" name="appointmentTime">
+            </div>
             <div class="float-end">
                 <button type="submit" class="btn btn-success">SUBMIT</button>
             </div>
         </form>
     </div>
 </body>
-</html></html>
+</html>

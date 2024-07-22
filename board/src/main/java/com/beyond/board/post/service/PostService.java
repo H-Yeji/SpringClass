@@ -11,11 +11,17 @@ import com.beyond.board.post.dto.PostResDto;
 import com.beyond.board.post.dto.PostUpdateDto;
 import com.beyond.board.post.repository.PostRepository;
 import lombok.extern.slf4j.Slf4j;
+import net.bytebuddy.asm.Advice;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -63,33 +69,55 @@ public class PostService {
         log.info("이메일 잘 찾았음? {}", findEmail);
         Author author = authorService.authorFindByEmail(findEmail);
         log.info("이메일로 찾아온 객체 : {}", author.getEmail());
-        Post post = dto.toEntity(author); // dto > entity
+
+        //Post post = dto.toEntity(author, dto.getAppointment_yn());
+        //return postRepository.save(post);
+
+        LocalDateTime appointmentTime = null;
+        if (dto.getAppointment().equals("Y") && !dto.getAppointmentTime().isEmpty()) {
+            DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
+            appointmentTime = LocalDateTime.parse(dto.getAppointmentTime(), dateTimeFormatter);
+            LocalDateTime now = LocalDateTime.now();
+
+            if (appointmentTime.isBefore(now)) {
+                throw new IllegalArgumentException("시간 입력이 잘못되었습니다.");
+            }
+        }
+
+        Post post = dto.toEntity(author, appointmentTime);
         return postRepository.save(post);
+
     }
 
     /**
      * 게시글 목록 조회
      */
-    public List<PostResDto> postList() {
+    public Page<PostResDto> postList(Pageable pageable) {
 
         //List<Post> postList = postRepository.findAll();
-        List<Post> postList = postRepository.findAllFetch(); // lazy 때문에 변경
+//        List<Post> postList = postRepository.findAllFetch(); // lazy 때문에 변경
+//
+//        List<PostResDto> postResDtoList = new ArrayList<>();
+//
+//        for (Post post : postList) {
+//
+//            // lazy 때문에 변경
+//            // 작성자 이메일도 가져와서 보내기
+////            String findEmail = post.getAuthor().getEmail();
+////            Author author = authorService.authorFindByEmail(findEmail);
+//
+////            PostResDto postResDto = post.listFromEntity(author);
+//            PostResDto postResDto = post.listFromEntity();
+//            postResDtoList.add(postResDto);
+//        }
+//
+//        return postResDtoList;
 
-        List<PostResDto> postResDtoList = new ArrayList<>();
+//        Page<Post> posts = postRepository.findAll(pageable);
+        Page<Post> posts = postRepository.findByAppointment(pageable, "N");
+        Page<PostResDto> postResDtos = posts.map(a -> a.listFromEntity());
 
-        for (Post post : postList) {
-
-            // lazy 때문에 변경
-            // 작성자 이메일도 가져와서 보내기
-//            String findEmail = post.getAuthor().getEmail();
-//            Author author = authorService.authorFindByEmail(findEmail);
-
-//            PostResDto postResDto = post.listFromEntity(author);
-            PostResDto postResDto = post.listFromEntity();
-            postResDtoList.add(postResDto);
-        }
-
-        return postResDtoList;
+        return postResDtos;
     }
 
     /**
@@ -128,6 +156,18 @@ public class PostService {
 
         postRepository.save(post);
 
+    }
+
+    /**
+     * post list 페이징 처리
+     */
+    public Page<PostResDto> postListPage(Pageable pageable) {
+        // jpa의 findAll은 return 타입이 List<Post>이므로 새로 만들어줘야 함
+        Page<Post> posts = postRepository.findAll(pageable);
+
+        Page<PostResDto> postResDtos = posts.map(a -> a.listFromEntity());
+
+        return postResDtos;
     }
 
 

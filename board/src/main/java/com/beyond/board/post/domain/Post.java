@@ -10,6 +10,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -27,6 +28,9 @@ public class Post extends BaseTimeEntity {
 
     @Column(length = 3000)
     private String contents;
+
+    private String appointment;
+    private LocalDateTime appointmentTime;
 
     // author와 관계설정
     // 연관관계의 주인 : fk가 있는 post 테이블임 ⭐ 주의 (주인이라고 부모가 아님 !)
@@ -94,6 +98,13 @@ public class Post extends BaseTimeEntity {
         this.contents = dto.getContents();
 
         return this;
+    }
+
+    /**
+     * 수정 부분 공부하기 => yn 업데이트
+     */
+    public void updateAppointment(String yn) {
+        this.appointment = yn;
     }
 
 }
