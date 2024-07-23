@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityNotFoundException;
+
 @SpringBootTest
 @Transactional // 롤백 처리르 위해 transactinal 어노테이션 사용
 public class AuthorRepositoryTest {
@@ -30,7 +32,7 @@ public class AuthorRepositoryTest {
         // 실행 (execute, when)
         authorRepository.save(author);
         Author savedAuthor = authorRepository.findByEmail("hong2@naver.com").orElse(null);
-
+        Author authorDetail = authorRepository.findById(author.getId()).orElseThrow(()->new EntityNotFoundException("없음"));
         // 검증 (then)
         Assertions.assertEquals(author.getEmail(), savedAuthor.getEmail());
     }

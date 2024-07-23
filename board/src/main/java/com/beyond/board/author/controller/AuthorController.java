@@ -58,8 +58,16 @@ public class AuthorController {
     @GetMapping("/detail/{id}")
     public String authorDetail(@PathVariable Long id, Model model) {
 
-        AuthorDetailDto authorDetailDto = authorService.authorDetail(id);
-        model.addAttribute("author", authorDetailDto);
+//        log.info("get요청이고, parameter는 " + id);
+//        log.info("method 명 : authorDetail");
+
+        try {
+            AuthorDetailDto authorDetailDto = authorService.authorDetail(id);
+            model.addAttribute("author", authorDetailDto);
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+            // log.error(String.valueOf(id));
+        }
 
         return "author/author_details";
     }

@@ -55,7 +55,6 @@ public class PostController {
     public String postList(Model model, @PageableDefault(size=10, sort = "createdTime"
             , direction = Sort.Direction.DESC) Pageable pageable) {
 
-
         Page<PostResDto> postResDto = postService.postList(pageable);
         model.addAttribute("postList", postResDto);
 
@@ -67,6 +66,9 @@ public class PostController {
      */
     @GetMapping("/detail/{id}")
     public String detailPost(@PathVariable Long id, Model model) {
+
+//        log.info("get요청이고, parameter는 " + id);
+//        log.info("method 명 : detailPost");
 
         PostDetailDto postDetailDto = postService.postDetail(id);
         model.addAttribute("post", postDetailDto);

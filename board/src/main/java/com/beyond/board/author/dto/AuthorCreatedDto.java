@@ -2,12 +2,15 @@ package com.beyond.board.author.dto;
 
 import com.beyond.board.author.domain.Author;
 import com.beyond.board.author.domain.Role;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
 
 @Data
+@AllArgsConstructor
 @NoArgsConstructor
 public class AuthorCreatedDto {
 
@@ -15,6 +18,13 @@ public class AuthorCreatedDto {
     private String email;
     private String password;
     private Role role;
+
+//    public AuthorCreatedDto(String name, String email, String password, Role role) {
+//        this.name = name;
+//        this.email = email;
+//        this.password = password;
+//        this.role = role;
+//    }
 
     public Author toEntity() {
         //Author author = new Author(this.name, this.email, this.password, this.role);

@@ -35,6 +35,9 @@ public class AuthorService {
         if (authorRepository.findByEmail(dto.getEmail()).isPresent()) {
             throw new IllegalArgumentException("이미 존재하는 이메일입니다.");
         }
+        if (dto.getPassword().length() < 8) {
+            throw new IllegalArgumentException("비밀번호가 너무 짧음");
+        }
         Author author = dto.toEntity(); // dto > entity
 
         //======================== casecade persist 테스트 ========================
