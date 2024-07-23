@@ -73,18 +73,19 @@ public class MemberRestController {
     @GetMapping("/member/detail/{id}")
     public ResponseEntity<?> memberDetail(@PathVariable Long id) {
 
-        try {
+//        try {
             MemberDetailResDto memberDto = memberService.memberDetail(id);
 
             CommonResDto commonResDto = new CommonResDto(HttpStatus.OK, "no error", memberDto);
 
             return new ResponseEntity<>(commonResDto, HttpStatus.OK);
 
-        } catch (EntityNotFoundException e){
-            CommonErrorDto commonErrorDto = new CommonErrorDto(HttpStatus.NOT_FOUND.value(), e.getMessage());
-
-            return new ResponseEntity<>(commonErrorDto, HttpStatus.NOT_FOUND);
-        }
+//        }
+//        catch (EntityNotFoundException e){
+//            CommonErrorDto commonErrorDto = new CommonErrorDto(HttpStatus.NOT_FOUND.value(), e.getMessage());
+//
+//            return new ResponseEntity<>(commonErrorDto, HttpStatus.NOT_FOUND);
+//        }
     }
 
     /**
@@ -107,15 +108,15 @@ public class MemberRestController {
     @PostMapping("/member/create")
     public ResponseEntity<?> createMemberPost(@RequestBody MemberReqDto dto) {
 
-        try {
+//        try {
             memberService.memberCreate(dto);
 
             CommonResDto commonResDto = new CommonResDto(HttpStatus.OK, "member created successfully", null);
             return new ResponseEntity<>(commonResDto, HttpStatus.OK);
-        } catch (IllegalArgumentException e) {
-            CommonErrorDto commonErrorDto = new CommonErrorDto(HttpStatus.BAD_REQUEST.value(), e.getMessage());
-            return new ResponseEntity<>(commonErrorDto, HttpStatus.BAD_REQUEST);
-        }
+//        } catch (IllegalArgumentException e) {
+//            CommonErrorDto commonErrorDto = new CommonErrorDto(HttpStatus.BAD_REQUEST.value(), e.getMessage());
+//            return new ResponseEntity<>(commonErrorDto, HttpStatus.BAD_REQUEST);
+//        }
     }
 
     /**
