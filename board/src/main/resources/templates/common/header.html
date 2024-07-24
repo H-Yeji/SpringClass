@@ -20,6 +20,13 @@
                     <li class="nav-item">
                         <a href="/author/create" target="_parent" class="nav-link">회원 가입</a>
                     </li>
+                    <!-- 로그인, 로그아웃 버튼 생성/ 근데 로그인이 되었음 로그아웃 버튼만, 로그아웃 상태면 로그인 버튼만 보이게 -->
+                    <li class="nav-item" th:if="${session.email == null}">
+                        <a href="/author/login-screen" target="_parent" class="nav-link">로그인</a>
+                    </li>
+                    <li class="nav-item" th:if="${session.email != null}">
+                        <a href="/doLogout" target="_parent" class="nav-link">로그아웃</a>
+                    </li>
                 </ul>
             </nav>
         </div>

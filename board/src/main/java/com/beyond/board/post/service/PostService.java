@@ -15,10 +15,13 @@ import net.bytebuddy.asm.Advice;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -65,10 +68,17 @@ public class PostService {
 //        log.info("author = {}", author);
 
         // (2) authorService 주입받아서 -> email로 찾기
-        String findEmail = dto.getAuthorEmail();
-        log.info("이메일 잘 찾았음? {}", findEmail);
-        Author author = authorService.authorFindByEmail(findEmail);
-        log.info("이메일로 찾아온 객체 : {}", author.getEmail());
+//        String findEmail = dto.getAuthorEmail();
+//        log.info("이메일 잘 찾았음? {}", findEmail);
+//        Author author = authorService.authorFindByEmail(findEmail);
+//        log.info("이메일로 찾아온 객체 : {}", author.getEmail());
+
+        // (3) 로그인 세션으로 이메일 찾아오기
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        Author author = authorService.authorFindByEmail(email);
+        // 세션에서 email 꺼내와
+//        HttpSession httpSession = request.getSession(); // 사용자의 session꺼내기
+//        httpSession.setAttribute("email", SecurityContextHolder.getContext().getAuthentication().getName());
 
         //Post post = dto.toEntity(author, dto.getAppointment_yn());
         //return postRepository.save(post);
@@ -139,7 +149,14 @@ public class PostService {
      */
     @Transactional
     public void delete(Long id) {
-        postRepository.deleteById(id);
+        // 세션으로 "로그인한 회원의 게시글"인지 확인해서 삭제
+        String email = SecurityContextHolder.getContext().getAuthentication().getName(); // getName이 email가져오는거
+        Post post = postRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("없음"));
+
+        if (!post.getAuthor().getEmail().equals(email)) { // 해당 게시글 작성자와 내가 찾아온 email과 같으면 삭제가능
+            throw new IllegalArgumentException("본인의 게시글이 아님");
+        }
+        postRepository.delete(post);
     }
 
     /**
@@ -148,9 +165,15 @@ public class PostService {
     @Transactional
     public void postUpdate(Long id, PostUpdateDto dto) {
 
-        Optional<Post> findPost = postRepository.findById(id);
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        Post post = postRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("없는 게시글 입니다."));
 
-        Post post = findPost.orElseThrow(() -> new EntityNotFoundException("없는 게시글 입니다."));
+        if (!post.getAuthor().getEmail().equals(email)) { // 해당 게시글 작성자와 내가 찾아온 email과 같으면 삭제가능
+            throw new IllegalArgumentException("본인의 게시글이 아님");
+        }
+//        Optional<Post> findPost = postRepository.findById(id);
+//
+//        Post post = findPost.orElseThrow(() -> new EntityNotFoundException("없는 게시글 입니다."));
 
         post.updateFromEntity(dto);
 

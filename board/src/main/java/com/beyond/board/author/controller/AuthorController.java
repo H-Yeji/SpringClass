@@ -93,5 +93,13 @@ public class AuthorController {
         return "redirect:/author/detail/"+id;
     }
 
+    /**
+     * 회원가입
+     */
+    @GetMapping("/login-screen")
+    public String authorLoginScreen() {
+        return "author/login-screen";
+    }
+
 
 }

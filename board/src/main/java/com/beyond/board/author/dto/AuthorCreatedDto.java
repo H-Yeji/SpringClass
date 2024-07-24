@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.ArrayList;
 
@@ -26,12 +27,14 @@ public class AuthorCreatedDto {
 //        this.role = role;
 //    }
 
-    public Author toEntity() {
+
+    public Author toEntity(String encodedPassword) {
         //Author author = new Author(this.name, this.email, this.password, this.role);
         Author author = Author.builder()
                 .name(this.name)
                 .email(this.email)
-                .password(this.password)
+                //.password(this.password)
+                .password(encodedPassword)
                 .role(this.role)
                 .posts(new ArrayList<>())
                 .build();

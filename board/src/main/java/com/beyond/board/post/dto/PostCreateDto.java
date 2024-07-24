@@ -14,8 +14,8 @@ public class PostCreateDto {
     private String title;
     private String contents;
     private Long authorId;
-    // 추후 로그인 기능 이후에는 없어질 dto
-    private String authorEmail;
+    // 추후 로그인 기능 이후에는 없어질 dto -> session으로 바꿈
+    //private String authorEmail;
     //private Author author; // 순환참조 테스트 확인용
     private String appointment;
     private String appointmentTime;

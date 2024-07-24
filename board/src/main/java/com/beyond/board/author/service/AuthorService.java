@@ -6,8 +6,10 @@ import com.beyond.board.author.dto.AuthorDetailDto;
 import com.beyond.board.author.dto.AuthorResDto;
 import com.beyond.board.author.dto.AuthorUpdateDto;
 import com.beyond.board.author.repository.AuthorRepository;
+import com.beyond.board.common.WebConfig;
 import com.beyond.board.post.domain.Post;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,10 +23,13 @@ import java.util.Optional;
 public class AuthorService {
 
     private final AuthorRepository authorRepository;
+    private final PasswordEncoder passwordEncoder;
     @Autowired
-    public AuthorService(AuthorRepository authorRepository) {
+    public AuthorService(AuthorRepository authorRepository, PasswordEncoder passwordEncoder) {
         this.authorRepository = authorRepository;
+        this.passwordEncoder = passwordEncoder;
     }
+
 
     /**
      * 회원가입
@@ -38,7 +43,7 @@ public class AuthorService {
         if (dto.getPassword().length() < 8) {
             throw new IllegalArgumentException("비밀번호가 너무 짧음");
         }
-        Author author = dto.toEntity(); // dto > entity
+        Author author = dto.toEntity(passwordEncoder.encode(dto.getPassword())); // dto > entity
 
         //======================== casecade persist 테스트 ========================
         // 회원가입하면 게시글 자동 생성

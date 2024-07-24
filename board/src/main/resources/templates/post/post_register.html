@@ -17,9 +17,11 @@
                 <input type="text" id="title" class="form-control" name="title" placeholder="제목을 작성하세요.">
             </div>
             <div class="form-group">
-                <label for="authorEmail">이메일</label>
-                <input type="text" id="authorEmail" class="form-control" name="authorEmail" placeholder="이메일을 입력하세요.">
+                <label>이메일</label> &nbsp;&nbsp;&nbsp;
+<!--                <input type="text" th:text="${session.email != null} ? ${session.email}" id="authorEmail" class="form-control" name="authorEmail" readonly>-->
+                <span th:text="${session.email != null} ? ${session.email}"></span>
             </div>
+            <br>
             <div class="form-group">
                 <label for="contents">내용 입력</label><br>
                 <textarea name="contents" id="contents" class="form-control" rows="10" maxlen="800" placeholder="내용을 작성하세요."></textarea>
