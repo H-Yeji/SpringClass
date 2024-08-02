@@ -46,14 +46,15 @@ public class MemberRestController {
 
     // memberList : CommonResDto 감싸서 상태코드까지 return 200
     @GetMapping("/member/list")
-    public ResponseEntity<List<CommonResDto>> findMemberList() {
+    public ResponseEntity<Object> findMemberList() {
 
         List<MemberResDto> memberResDtoList = memberService.memberList();
+        CommonResDto commonResDto = new CommonResDto(HttpStatus.OK, "members are found", memberResDtoList);
 
-        List<CommonResDto> commonResDto = new ArrayList<>();
-        for (MemberResDto memberResDto: memberResDtoList) {
-            commonResDto.add(new CommonResDto(HttpStatus.OK, "no error", memberResDto));
-        }
+//        List<CommonResDto> commonResDto = new ArrayList<>();
+//        for (MemberResDto memberResDto: memberResDtoList) {
+//            commonResDto.add(new CommonResDto(HttpStatus.OK, "no error", memberResDto));
+//        }
         return new ResponseEntity<>(commonResDto, HttpStatus.OK);
     }
 
